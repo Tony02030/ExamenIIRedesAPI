@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\OneDrive\\Documentos\\Visual Studio 2022\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj": {}
+    "C:\\Users\\yulia.DESKTOP-72Q9BEE\\Documents\\Universidad\\I Semestre 2022\\Redes\\Examen-API\\ExamenIIRedesAPI\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\OneDrive\\Documentos\\Visual Studio 2022\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj": {
+    "C:\\Users\\yulia.DESKTOP-72Q9BEE\\Documents\\Universidad\\I Semestre 2022\\Redes\\Examen-API\\ExamenIIRedesAPI\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\OneDrive\\Documentos\\Visual Studio 2022\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj",
+        "projectUniqueName": "C:\\Users\\yulia.DESKTOP-72Q9BEE\\Documents\\Universidad\\I Semestre 2022\\Redes\\Examen-API\\ExamenIIRedesAPI\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj",
         "projectName": "ExamenIIRedesAPI",
-        "projectPath": "C:\\Users\\User\\OneDrive\\Documentos\\Visual Studio 2022\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\OneDrive\\Documentos\\Visual Studio 2022\\ExamenIIRedesAPI\\obj\\",
+        "projectPath": "C:\\Users\\yulia.DESKTOP-72Q9BEE\\Documents\\Universidad\\I Semestre 2022\\Redes\\Examen-API\\ExamenIIRedesAPI\\ExamenIIRedesAPI\\ExamenIIRedesAPI.csproj",
+        "packagesPath": "C:\\Users\\yulia.DESKTOP-72Q9BEE\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\yulia.DESKTOP-72Q9BEE\\Documents\\Universidad\\I Semestre 2022\\Redes\\Examen-API\\ExamenIIRedesAPI\\ExamenIIRedesAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\yulia.DESKTOP-72Q9BEE\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
