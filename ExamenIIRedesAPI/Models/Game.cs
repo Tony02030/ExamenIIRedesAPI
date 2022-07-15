@@ -1,5 +1,7 @@
 ﻿
 
+using System.Security.Cryptography;
+
 namespace ExamenIIRedesAPI.Models
 {
     public class Game
@@ -17,7 +19,7 @@ namespace ExamenIIRedesAPI.Models
 
         private List<string> players;
         private List<string> psychos;
-        private bool psychoWin;
+        private List<bool> psychoWin;
         private string status;
         private List<Round> rounds;
         public Game()
@@ -28,20 +30,20 @@ namespace ExamenIIRedesAPI.Models
             this.password = "";
             this.players = new List<string>();
             this.psychos = new List<string>();
-            this.psychoWin = false;
             this.rounds = new List<Round>();
         }
 
         public Game(string name, string owner, string password)
         {
-            this.gameId = "Prueba";//Generarlo aleatorio
+            this.gameId = idGames();//Generarlo aleatorio
             this.name = name;
             this.owner = owner;
             this.password = password;
             this.players = new List<string>();
             this.psychos = new List<string>();
-            this.psychoWin = false;
+            this.psychoWin = new List<bool>();
             this.rounds = new List<Round>();
+            this.status = "lobby";
         }
 
         public string GameId { get => gameId; set => gameId = value; }
@@ -50,8 +52,25 @@ namespace ExamenIIRedesAPI.Models
         public string Password { get => password; set => password = value; }
         public List<string> Players { get => players; set => players = value; }
         public List<string> Psychos { get => psychos; set => psychos = value; }
-        public bool PsychoWin { get => psychoWin; set => psychoWin = value; }
+        public List<bool> PsychoWin { get => psychoWin; set => psychoWin = value; }
         public string Status { get => status; set => status = value; }
         public List<Round> Rounds { get => rounds; set => rounds = value; }
+
+        public string idGames()
+        {
+            var bytesarray = new byte[0];
+
+            using (var crypto = new RNGCryptoServiceProvider())
+            {
+                var bits = (40 * 6);
+                var byte_size = ((bits + 7) / 8);
+                bytesarray = new byte[byte_size];
+                crypto.GetBytes(bytesarray);
+            }
+
+            return Convert.ToBase64String(bytesarray);
+        }
+
+
     }
 }
