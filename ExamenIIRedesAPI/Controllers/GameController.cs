@@ -14,9 +14,18 @@ namespace ExamenIIRedesAPI.Controllers
 
         // GET: api/<GameController>
         [HttpGet]
-        public List<Game> Get()
+        public List<GameGet> Get()
         {
-            return Util.Utility.gameList;
+            List<GameGet> games = new List<GameGet>();
+
+            for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+            {
+
+                GameGet game = new GameGet(Util.Utility.gameList[i].GameId, Util.Utility.gameList[i].Name);
+                games.Add(game);
+
+            }
+            return games;
         }
 
         // GET api/<GameController>/5
