@@ -30,14 +30,14 @@ namespace ExamenIIRedesAPI.Controllers
 
         // GET api/<GameController>/5
         [HttpGet("{id}")]
-        public Game Get(string id)
+        public Game Get(string gameId, [FromHeader] string name, [FromHeader] string password)
         {
             Game game = new Game();
 
             for (int i = 0; i < Util.Utility.gameList.Count(); i++)
             {
                 game = Util.Utility.gameList[i];
-                if (game.GameId.Equals(id))
+                if (game.GameId.Equals(gameId) && game.Name.Equals(name) && game.Password.Equals(password))
                 {
                     return game;
                 }
@@ -46,7 +46,6 @@ namespace ExamenIIRedesAPI.Controllers
                     return game;
                 }
             }
-
 
             return game;
 
