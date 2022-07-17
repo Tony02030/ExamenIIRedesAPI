@@ -14,18 +14,73 @@ namespace ExamenIIRedesAPI.Controllers
 
         // GET: api/<GameController>
         [HttpGet]
-        public List<GameGet> Get()
+        public List<GameGet> Get(string? filter, string? filterValue)
         {
-            List<GameGet> games = new List<GameGet>();
-
-            for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+             if (filter == "owner")
             {
+                List<GameGet> games = new List<GameGet>();
 
-                GameGet game = new GameGet(Util.Utility.gameList[i].GameId, Util.Utility.gameList[i].Name);
-                games.Add(game);
+                for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+                {
+                    if (Util.Utility.gameList[i].Owner == filterValue)
+                    {
+                        GameGet game = new GameGet(Util.Utility.gameList[i].GameId, Util.Utility.gameList[i].Name);
+                        games.Add(game);
+                    }
+                    
+
+                }
+                return games;
+                
 
             }
-            return games;
+            else if (filter == "gameId")
+            {
+                List<GameGet> games = new List<GameGet>();
+
+                for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+                {
+                    if (Util.Utility.gameList[i].GameId == filterValue)
+                    {
+                        GameGet game = new GameGet(Util.Utility.gameList[i].GameId, Util.Utility.gameList[i].Name);
+                        games.Add(game);
+                    }
+
+
+                }
+                return games;
+            }
+            else if (filter == "status")
+            {
+                List<GameGet> games = new List<GameGet>();
+
+                for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+                {
+                    if (Util.Utility.gameList[i].Status == filterValue)
+                    {
+                        GameGet game = new GameGet(Util.Utility.gameList[i].GameId, Util.Utility.gameList[i].Name);
+                        games.Add(game);
+                    }
+
+
+                }
+                return games;
+
+            }
+            else
+            {
+                List<GameGet> games = new List<GameGet>();
+
+                for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+                {
+
+                    GameGet game = new GameGet(Util.Utility.gameList[i].GameId, Util.Utility.gameList[i].Name);
+                    games.Add(game);
+
+                }
+                return games;
+            }
+            
         }
 
         // GET api/<GameController>/5
@@ -53,6 +108,7 @@ namespace ExamenIIRedesAPI.Controllers
 
         // POST api/game/create
         [HttpPost]
+        
         public IActionResult Create(string? owner, [FromBody] GameBase game)
         {
             if (!ModelState.IsValid)
@@ -73,7 +129,7 @@ namespace ExamenIIRedesAPI.Controllers
                 
             {
                     
-                Game game1 = new Game(owner, game.Name, game.Password);
+                Game game1 = new Game(game.Name,owner, game.Password);
                     
                 Util.Utility.gameList.Add(game1);
                     
