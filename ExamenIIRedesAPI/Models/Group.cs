@@ -3,16 +3,16 @@
     public class Group
     {
         private string name;
-        private bool psycho;
+        private bool? psycho;
 
-        public Group(string name, bool psycho)
+        public Group(string name)
         {
             this.name = name;
-            this.psycho = psycho;
+            psycho = null;
         }
 
         public string Name { get => name; set => name = value; }
-        public bool Psycho { get => psycho; set => psycho = value; }
+        public bool? Psycho { get => psycho; set => psycho = value; }
     }
 
 

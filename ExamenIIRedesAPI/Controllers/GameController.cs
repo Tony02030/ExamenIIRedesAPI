@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 namespace ExamenIIRedesAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/game/")]
+    [Route("/game/")]
 
     public class GameController : ControllerBase
 
@@ -16,7 +16,7 @@ namespace ExamenIIRedesAPI.Controllers
         [HttpGet]
         public List<GameGet> Get(string? filter, string? filterValue)
         {
-             if (filter == "owner")
+            if (filter == "owner")
             {
                 List<GameGet> games = new List<GameGet>();
 
@@ -27,11 +27,11 @@ namespace ExamenIIRedesAPI.Controllers
                         GameGet game = new GameGet(Util.Utility.gameList[i].GameId, Util.Utility.gameList[i].Name);
                         games.Add(game);
                     }
-                    
+
 
                 }
                 return games;
-                
+
 
             }
             else if (filter == "gameId")
@@ -80,11 +80,11 @@ namespace ExamenIIRedesAPI.Controllers
                 }
                 return games;
             }
-            
+
         }
 
         // GET api/<GameController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{gameId}")]
         public Game Get(string gameId, [FromHeader] string name, [FromHeader] string password)
         {
             Game game = new Game();
@@ -106,10 +106,10 @@ namespace ExamenIIRedesAPI.Controllers
 
         }
 
-        // POST api/game/create
-        [HttpPost]
-        
-        public IActionResult Create(string? owner, [FromBody] GameBase game)
+        // POST /game/create       
+       [HttpPost]
+       [Route("[action]")]
+        public IActionResult create(string? owner, [FromBody] GameBase game)
         {
             if (!ModelState.IsValid)
             {
@@ -144,11 +144,120 @@ namespace ExamenIIRedesAPI.Controllers
         }
 
         // PUT api/<GameController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpHead]
+        [Route("{gameId}/[action]")]
+        public IActionResult start(string gameId, [FromHeader] string name, [FromHeader] string password)
         {
+            
+
+                if (Util.Utility.existGameId(gameId))
+                {
+                    if (Util.Utility.existOwner(name))
+                    {
+                        if (Util.Utility.password(password))
+                        {
+                            if (Util.Utility.getGame(gameId).Status == "lobby")
+                            {
+                                Util.Utility.getGame(gameId).Status = "leader";
+                                return Ok();
+                            }
+                            else
+                            {
+                                return StatusCode(401, "Unathorized");
+                            }
+
+                        }
+                        else
+                        {
+                            return StatusCode(401, "Unathorized");
+                        }
+
+                    }
+                    else
+                    {
+                        return StatusCode(401, "You are not the game's owner");
+
+
+                    }
+                }
+                else
+                {
+                    return StatusCode(404, "Invalid Game's id");
+                }
+            
+            
         }
 
-        
+        [HttpPost]
+        [Route("{gameId}/[action]")]
+        public IActionResult group(string gameId, [FromHeader] string name, [FromHeader] string password, [FromBody] GroupProposal playersGroup)
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(406, "Provided group has invalid parameters");
+            }
+            else
+            {
+                if (Util.Utility.verifyPlayersCount(gameId, playersGroup.Players.Count()) && Util.Utility.verifyPlayersExist(gameId,playersGroup)) { 
+                    if (Util.Utility.existGameId(gameId))
+                    {
+                        if (Util.Utility.existPlayer(gameId, name))
+                        {
+                            if (Util.Utility.password(password))
+                            {
+                                if (Util.Utility.getGame(gameId).Status == "leader")
+                                {
+                                    Util.Utility.getGame(gameId).Status = "rounds";
+                                    
+                                    for (int i = 0; i < playersGroup.Players.Count(); i++)
+                                    {
+                                        Group group = new Group(playersGroup.Players[i]);
+                                        Util.Utility.getGame(gameId).Rounds[Util.Utility.getRounds(gameId)].Group.Add(group);
+
+
+                                    }
+
+                                    return Ok();
+                                }
+                                else
+                                {
+                                    return StatusCode(406, "Game is not in the groups stage");
+                                }
+
+                            }
+                            else
+                            {
+                                return StatusCode(401, "Unathorized");
+                            }
+
+                        }
+                        else
+                        {
+                            return StatusCode(403, "You are not part of the players list");
+
+
+                        }
+                    }
+                    else
+                    {
+                        return StatusCode(404, "Invalid Game's id");
+                    }
+                }
+                else
+                {
+                    return StatusCode(406, "Provided group has invalid parameters (size/players)");
+                }
+
+            }
+        }
+
+       // [HttpPost]
+       // [Route("{gameId}/[action]")]
+        //public IActionResult go(string gameId, [FromHeader] string name, [FromHeader] string password, [FromBody] PsychoSelection psycho)
+        //{
+           
+       // }
+
+
     }
 }
