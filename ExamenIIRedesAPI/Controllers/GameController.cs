@@ -109,7 +109,7 @@ namespace ExamenIIRedesAPI.Controllers
         // POST /game/create       
        [HttpPost]
        [Route("[action]")]
-        public IActionResult create(string? owner, [FromBody] GameBase game)
+        public ActionResult create(string? owner, [FromBody] GameBase game)
         {
             if (!ModelState.IsValid)
             {
@@ -143,54 +143,121 @@ namespace ExamenIIRedesAPI.Controllers
            
         }
 
+        
+
         // PUT api/<GameController>/5
+        [HttpPut]
+        [Route("{gameId}/[action]")]
+        public ActionResult join(string gameId, [FromHeader] string name, [FromHeader] string password)
+        {
+            for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+            {
+                if (Util.Utility.gameList[i].GameId.Equals(gameId))
+                {
+                    Game game = Util.Utility.gameList[i];
+
+                    if (!ModelState.IsValid || !Util.Utility.existGameId(gameId))
+                    {
+                        return StatusCode(404, "Invalid Game's id");
+                    }
+
+                    else if (!Util.Utility.existPlayer(gameId, name))//afinar esta condición
+                    {
+                        return StatusCode(403, "You are not part of the players list");
+                    }
+                    else if (!Util.Utility.password(password))
+                    {
+                        return StatusCode(401, "Unathorized");
+                    }
+
+                    else if (game.Status.Equals("started") || game.Players.Count() >= 10)
+                    {
+                        return StatusCode(406, "Game has already started or is full");
+                    }
+
+                    else if (Util.Utility.existPlayer(gameId, name))
+                    {
+                        return StatusCode(409, "You are already part of this game");
+                    }
+
+                    else
+                    {
+                        Util.Utility.gameList[i].Players.Add(name);
+                        return StatusCode(200, "Player was added to the ongoing game");
+                    }
+                }//if
+            }//for
+
+            return StatusCode(404, "Trouble adding");
+
+        }
         [HttpHead]
         [Route("{gameId}/[action]")]
-        public IActionResult start(string gameId, [FromHeader] string name, [FromHeader] string password)
+        public ActionResult start(String gameId, [FromHeader]  String name, [FromHeader] String password)
         {
-            
 
-                if (Util.Utility.existGameId(gameId))
+            if (Util.Utility.existGameId(gameId))
+            {
+                if (Util.Utility.existOwner(name))
                 {
-                    if (Util.Utility.existOwner(name))
+                    if (Util.Utility.password(password))
                     {
-                        if (Util.Utility.password(password))
+
+                        if (Util.Utility.verifyPlayersCount(gameId))
                         {
                             if (Util.Utility.getGame(gameId).Status == "lobby")
                             {
                                 Util.Utility.getGame(gameId).Status = "leader";
-                                return Ok();
+                                int countPsychos = Util.Utility.getPsychosCount(gameId);
+                                int count = 0;
+                                while (count < countPsychos)
+                                {
+                                    string psycho = Util.Utility.getRandomLeader(gameId);
+                                    if (!Util.Utility.getGame(gameId).Psychos.Contains(psycho))
+                                    {
+                                        Util.Utility.getGame(gameId).Psychos.Add(psycho);
+                                        count++;
+                                    }
+                                }
+
+                                Round round = new Round(Util.Utility.getRandomLeader(gameId));
+                                Util.Utility.getGame(gameId).Rounds.Add(round);
+                                return Ok("Operation successful");
                             }
                             else
                             {
                                 return StatusCode(401, "Unathorized");
                             }
-
                         }
                         else
                         {
-                            return StatusCode(401, "Unathorized");
+                            return StatusCode(406, "Not Acceptable");
                         }
-
                     }
                     else
                     {
-                        return StatusCode(401, "You are not the game's owner");
-
-
+                        return StatusCode(401, "Unathorized");
                     }
+
                 }
                 else
                 {
-                    return StatusCode(404, "Invalid Game's id");
+                    return StatusCode(401, "You are not the game's owner");
+
+
                 }
-            
-            
+            }
+            else
+            {
+                return StatusCode(404, "Invalid Game's id");
+            }
+
+
         }
 
         [HttpPost]
         [Route("{gameId}/[action]")]
-        public IActionResult group(string gameId, [FromHeader] string name, [FromHeader] string password, [FromBody] GroupProposal playersGroup)
+        public ActionResult group(string gameId, [FromHeader] string name, [FromHeader] string password, [FromBody] GroupProposal playersGroup)
         {
             if (!ModelState.IsValid)
             {
@@ -198,7 +265,8 @@ namespace ExamenIIRedesAPI.Controllers
             }
             else
             {
-                if (Util.Utility.verifyPlayersCount(gameId, playersGroup.Players.Count()) && Util.Utility.verifyPlayersExist(gameId,playersGroup)) { 
+                if (Util.Utility.verifyPlayersCount(gameId, playersGroup.Players.Count()) && Util.Utility.verifyPlayersExist(gameId, playersGroup))
+                {
                     if (Util.Utility.existGameId(gameId))
                     {
                         if (Util.Utility.existPlayer(gameId, name))
@@ -208,7 +276,7 @@ namespace ExamenIIRedesAPI.Controllers
                                 if (Util.Utility.getGame(gameId).Status == "leader")
                                 {
                                     Util.Utility.getGame(gameId).Status = "rounds";
-                                    
+
                                     for (int i = 0; i < playersGroup.Players.Count(); i++)
                                     {
                                         Group group = new Group(playersGroup.Players[i]);
@@ -217,7 +285,7 @@ namespace ExamenIIRedesAPI.Controllers
 
                                     }
 
-                                    return Ok();
+                                    return Ok("Operation successful");
                                 }
                                 else
                                 {
@@ -251,57 +319,120 @@ namespace ExamenIIRedesAPI.Controllers
             }
         }
 
-       // [HttpPost]
-       // [Route("{gameId}/[action]")]
-        //public IActionResult go(string gameId, [FromHeader] string name, [FromHeader] string password, [FromBody] PsychoSelection psycho)
-        //{
-           
-       // }
 
-        // PUT api/<GameController>/5
-        [HttpPut]
-        [Route("[action]")]
-        public IActionResult join(string id, [FromHeader] string name, [FromHeader] string password)
+
+        [HttpPost]
+        [Route("{gameId}/[action]")]
+        public ActionResult go(string gameId, [FromHeader] string name, [FromHeader] string password, [FromBody] PsychoSelection psycho)
         {
-            for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+            if (!ModelState.IsValid)
             {
-                if (Util.Utility.gameList[i].GameId.Equals(id))
+                return StatusCode(406, "Data provided is invalid");
+            }
+            else
+            {
+                if (Util.Utility.verifyPlayerSelection(gameId, name))
                 {
-                    Game game = Util.Utility.gameList[i];
+                    if (Util.Utility.existGameId(gameId))
+                    {
+                        if (Util.Utility.existPlayer(gameId, name))
+                        {
+                            if (Util.Utility.verifyGroupList(gameId, name))
+                            {
 
-                    if (!ModelState.IsValid || !Util.Utility.existGameId(id))
+
+                                if (Util.Utility.password(password))
+                                {
+                                    if (Util.Utility.getGame(gameId).Status == "rounds")
+                                    {
+                                        Util.Utility.GetGroup(gameId, name).Psycho = psycho.Psycho;
+
+                                        if (Util.Utility.verifyAllGroupSelection(gameId))
+                                        {
+                                                if (Util.Utility.verifyPsychoWin(gameId))
+                                                {
+                                                    
+                                                    Util.Utility.getGame(gameId).PsychoWin.Add(true);
+                                                    if (Util.Utility.verifyGameWinner(gameId))
+                                                    {
+                                                        Util.Utility.getGame(gameId).Status = "ended";
+                                                    }
+                                                    else
+                                                    {
+                                                    Util.Utility.getGame(gameId).Rounds[Util.Utility.getRounds(gameId)].Winner = "psychos";
+                                                    Util.Utility.getGame(gameId).Status = "leader";
+                                                    Round round = new Round(Util.Utility.getRandomLeader(gameId));
+                                                    Util.Utility.getGame(gameId).Rounds.Add(round);
+                                                    }
+                                                
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    
+                                                    Util.Utility.getGame(gameId).PsychoWin.Add(false);
+                                                if (Util.Utility.verifyGameWinner(gameId))
+                                                {
+                                                    Util.Utility.getGame(gameId).Status = "ended";
+                                                }
+                                                else
+                                                {
+                                                    Util.Utility.getGame(gameId).Rounds[Util.Utility.getRounds(gameId)].Winner = "players";
+                                                    Util.Utility.getGame(gameId).Status = "leader";
+                                                    Round round = new Round(Util.Utility.getRandomLeader(gameId));
+                                                    Util.Utility.getGame(gameId).Rounds.Add(round);
+                                                }
+
+                                                }
+                                            
+
+                                        }
+
+                                        return Ok("Operation successful");
+                                    }
+                                    else
+                                    {
+                                        return StatusCode(406, "Game is not in the rounds stage");
+                                    }
+                                }
+                                else
+                                {
+                                    return StatusCode(401, "Unathorized");
+                                }
+                            }
+                            else
+                            {
+                                return StatusCode(401, "You are not part of the round list");
+                            }
+
+
+                        }
+                        else
+                        {
+                            return StatusCode(403, "You are not part of the players list");
+
+
+                        }
+                    }
+                    else
                     {
                         return StatusCode(404, "Invalid Game's id");
                     }
+                }
+                else
+                {
+                    return StatusCode(409, "There is already an entry for you this round");
+                }
 
-                    /*if (!game.Players.Contains(name))//afinar esta condición
-                    {
-                        return StatusCode(403, "You are not part of the players list");
-                    }*/
-
-                    if (game.Status.Equals("started") || game.Players.Count() >= 10)
-                    {
-                        return StatusCode(406, "Game has already started or is full");
-                    }
-
-                    if (Util.Utility.existPlayer(id, name))
-                    {
-                        return StatusCode(409, "You are already part of this game");
-                    }
-
-                    else
-                    {
-                        Util.Utility.gameList[i].Players.Add(name);
-                        return StatusCode(200, "Player was added to the ongoing game");
-                    }
-                }//if
-            }//for
-
-            return StatusCode(404, "Trouble adding");
+            }
 
         }
 
 
-
     }
+
+
+
+
 }
+

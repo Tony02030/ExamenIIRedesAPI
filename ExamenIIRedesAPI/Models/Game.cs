@@ -22,6 +22,7 @@ namespace ExamenIIRedesAPI.Models
         private List<bool> psychoWin;
         private string status;
         private List<Round> rounds;
+        private static Random random = new Random();
         public Game()
         {
             this.gameId = "";//Generarlo aleatorio
@@ -40,6 +41,7 @@ namespace ExamenIIRedesAPI.Models
             this.owner = owner;
             this.password = password;
             this.players = new List<string>();
+            this.players.Add(owner);
             this.psychos = new List<string>();
             this.psychoWin = new List<bool>();
             this.rounds = new List<Round>();
@@ -57,20 +59,13 @@ namespace ExamenIIRedesAPI.Models
         public List<Round> Rounds { get => rounds; set => rounds = value; }
 
         public string idGames()
-        {
-            var bytesarray = new byte[0];
-
-            using (var crypto = new RNGCryptoServiceProvider())
-            {
-                var bits = (40 * 6);
-                var byte_size = ((bits + 7) / 8);
-                bytesarray = new byte[byte_size];
-                crypto.GetBytes(bytesarray);
-            }
-
-            return Convert.ToBase64String(bytesarray);
+        { 
+            const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(characters, 40)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
-
     }
+
+
+    
 }
