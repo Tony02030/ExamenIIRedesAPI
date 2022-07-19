@@ -258,6 +258,50 @@ namespace ExamenIIRedesAPI.Controllers
            
        // }
 
+        // PUT api/<GameController>/5
+        [HttpPut]
+        [Route("[action]")]
+        public IActionResult join(string id, [FromHeader] string name, [FromHeader] string password)
+        {
+            for (int i = 0; i < Util.Utility.gameList.Count(); i++)
+            {
+                if (Util.Utility.gameList[i].GameId.Equals(id))
+                {
+                    Game game = Util.Utility.gameList[i];
+
+                    if (!ModelState.IsValid || !Util.Utility.existGameId(id))
+                    {
+                        return StatusCode(404, "Invalid Game's id");
+                    }
+
+                    /*if (!game.Players.Contains(name))//afinar esta condición
+                    {
+                        return StatusCode(403, "You are not part of the players list");
+                    }*/
+
+                    if (game.Status.Equals("started") || game.Players.Count() >= 10)
+                    {
+                        return StatusCode(406, "Game has already started or is full");
+                    }
+
+                    if (Util.Utility.existPlayer(id, name))
+                    {
+                        return StatusCode(409, "You are already part of this game");
+                    }
+
+                    else
+                    {
+                        Util.Utility.gameList[i].Players.Add(name);
+                        return StatusCode(200, "Player was added to the ongoing game");
+                    }
+                }//if
+            }//for
+
+            return StatusCode(404, "Trouble adding");
+
+        }
+
+
 
     }
 }
