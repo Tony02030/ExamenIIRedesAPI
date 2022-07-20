@@ -47,9 +47,11 @@ namespace ExamenIIRedesAPI.Models
             this.rounds = new List<Round>();
             this.status = "lobby";
         }
-
+        [SwaggerSchemaExample("WWMmTUllMLbJjKO2JlmdTonmJpYVUL9OMD83vue1")]
         public string GameId { get => gameId; set => gameId = value; }
+        [SwaggerSchemaExample("GameTest")]
         public string Name { get => name; set => name = value; }
+        [SwaggerSchemaExample("Ivan")]
         public string Owner { get => owner; set => owner = value; }
         public string Password { get => password; set => password = value; }
         public List<string> Players { get => players; set => players = value; }

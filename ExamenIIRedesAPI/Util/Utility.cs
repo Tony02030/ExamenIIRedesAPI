@@ -28,28 +28,27 @@ namespace ExamenIIRedesAPI.Util
 
         }
 
-        public static bool existOwner(string value)
+        public static async Task<bool> existOwner(Game game, string value)
         {
             bool gameExist = false;
-            for (int i = 0; i < gameList.Count(); i++)
-            {
-                if (gameList[i].Owner == value)
+
+                if (game.Owner == value)
                 {
                     gameExist = true;
                 }
 
 
-            }
+            
             return gameExist;
 
 
         }
-        public static bool existPlayer(string gameId, string value)
+        public static bool existPlayer(Game game, string value)
         {
             bool playerExist = false; 
-            for(int j=0; j < getGame(gameId).Players.Count(); j++)
+            for(int j=0; j < game.Players.Count(); j++)
             {
-                if (getGame(gameId).Players[j] == value)
+                if (game.Players[j] == value)
                 {
                     playerExist=true;
                 }
@@ -63,94 +62,94 @@ namespace ExamenIIRedesAPI.Util
 
         }
 
-       public static bool verifyPlayersCount(string gameId, int count)
+       public static bool verifyPlayersCount(Game game, int count)
         {
             bool verify = false;
 
-            if (getGame(gameId).Players.Count == 5)
+            if (game.Players.Count == 5)
             {
-                if (getGame(gameId).Rounds.Count() == 1 && count == 2)
+                if (game.Rounds.Count() == 1 && count == 2)
                 {
                     verify = true;
-                }else if (getGame(gameId).Rounds.Count() == 2 && count == 3)
+                }else if (game.Rounds.Count() == 2 && count == 3)
                 {
                     verify = true;
-                }else if (getGame(gameId).Rounds.Count() == 3 && count == 2)
+                }else if (game.Rounds.Count() == 3 && count == 2)
                 {
                     verify = true;
-                }else if (getGame(gameId).Rounds.Count() == 4 && count == 3)
+                }else if (game.Rounds.Count() == 4 && count == 3)
                 {
                     verify = true;
-                }else if (getGame(gameId).Rounds.Count() == 5 && count == 3)
+                }else if (game.Rounds.Count() == 5 && count == 3)
                 {
                     verify = true;
                 }
                 
-            }else if (getGame(gameId).Players.Count == 6)
+            }else if (game.Players.Count == 6)
             {
-                if (getGame(gameId).Rounds.Count() == 1 && count == 2)
+                if (game.Rounds.Count() == 1 && count == 2)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 2 && count == 3)
+                else if (game.Rounds.Count() == 2 && count == 3)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 3 && count == 4)
+                else if (game.Rounds.Count() == 3 && count == 4)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 4 && count == 3)
+                else if (game.Rounds.Count() == 4 && count == 3)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 5 && count == 4)
+                else if (game.Rounds.Count() == 5 && count == 4)
                 {
                     verify = true;
                 }
 
-            }else if (getGame(gameId).Players.Count == 7)
+            }else if (game.Players.Count == 7)
             {
-                if (getGame(gameId).Rounds.Count() == 1 && count == 2)
+                if (game.Rounds.Count() == 1 && count == 2)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 2 && count == 3)
+                else if (game.Rounds.Count() == 2 && count == 3)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 3 && count == 3)
+                else if (game.Rounds.Count() == 3 && count == 3)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 4 && count == 4)
+                else if (game.Rounds.Count() == 4 && count == 4)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 5 && count == 4)
+                else if (game.Rounds.Count() == 5 && count == 4)
                 {
                     verify = true;
                 }
 
-            }else if (getGame(gameId).Players.Count >= 8)
+            }else if (game.Players.Count >= 8)
             {
-                if (getGame(gameId).Rounds.Count() == 1 && count == 3)
+                if (game.Rounds.Count() == 1 && count == 3)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 2 && count == 4)
+                else if (game.Rounds.Count() == 2 && count == 4)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 3 && count == 4)
+                else if (game.Rounds.Count() == 3 && count == 4)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 4 && count == 5)
+                else if (game.Rounds.Count() == 4 && count == 5)
                 {
                     verify = true;
                 }
-                else if (getGame(gameId).Rounds.Count() == 5 && count == 5)
+                else if (game.Rounds.Count() == 5 && count == 5)
                 {
                     verify = true;
                 }
@@ -160,17 +159,17 @@ namespace ExamenIIRedesAPI.Util
             return verify;
         }
 
-        public static int getRounds(string gameId)
+        public static int getRounds(Game game)
         {
-            return getGame(gameId).Rounds.Count()-1;
+            return game.Rounds.Count()-1;
         }
 
-        public static bool verifyPlayersExist(string gameId, GroupProposal group)
+        public static bool verifyPlayersExist(Game game, GroupProposal group)
         {
             bool gameExist = true;
                 for (int j = 0; j < group.Players.Count(); j++)
                 {
-                    if (!getGame(gameId).Players.Contains(group.Players[j]))
+                    if (!game.Players.Contains(group.Players[j]))
                     {
                         gameExist = false;
                     }
@@ -211,14 +210,14 @@ namespace ExamenIIRedesAPI.Util
             return game;
         }
 
-        public static bool verifyPlayerSelection(string gameId, string name)//Verifica si el jugador ya eligió un camino
+        public static bool verifyPlayerSelection(Game game, string name)//Verifica si el jugador ya eligió un camino
         {
             bool verify = false;
-            for (int i = 0; i < getGame(gameId).Rounds[getRounds(gameId)].Group.Count(); i++)
+            for (int i = 0; i < game.Rounds[getRounds(game)].Group.Count(); i++)
             {
-                if (getGame(gameId).Rounds[getRounds(gameId)].Group[i].Name.Equals(name))
+                if (game.Rounds[getRounds(game)].Group[i].Name.Equals(name))
                 {
-                    if (getGame(gameId).Rounds[getRounds(gameId)].Group[i].Psycho == null)
+                    if (game.Rounds[getRounds(game)].Group[i].Psycho == null)
                     {
                         verify = true;
                     }
@@ -229,14 +228,14 @@ namespace ExamenIIRedesAPI.Util
             return verify;
             
         }
-        public static Group GetGroup(string gameId, string name)
+        public static Group GetGroup(Game game, string name)
         {
             Group group = null;
-            for (int i = 0; i < getGame(gameId).Rounds[getRounds(gameId)].Group.Count(); i++)
+            for (int i = 0; i < game.Rounds[getRounds(game)].Group.Count(); i++)
             {
-                if (getGame(gameId).Rounds[getRounds(gameId)].Group[i].Name.Equals(name))
+                if (game.Rounds[getRounds(game)].Group[i].Name.Equals(name))
                 {
-                    group = getGame(gameId).Rounds[getRounds(gameId)].Group[i];
+                    group = game.Rounds[getRounds(game)].Group[i];
                 }
 
 
@@ -244,33 +243,33 @@ namespace ExamenIIRedesAPI.Util
             return group;
 
         }
-        public static bool verifyAllGroupSelection(string gameId)//Verifica si el grupo ya realizo todas sus elecciones
+        public static bool verifyAllGroupSelection(Game game)//Verifica si el grupo ya realizo todas sus elecciones
         {
             bool verify = false;
             int count = 0;
-            for (int i = 0; i < getGame(gameId).Rounds[getRounds(gameId)].Group.Count(); i++)
+            for (int i = 0; i < game.Rounds[getRounds(game)].Group.Count(); i++)
             {
-                if (getGame(gameId).Rounds[getRounds(gameId)].Group[i].Psycho!=null)
+                if (game.Rounds[getRounds(game)].Group[i].Psycho!=null)
                 {
                     count++;
                 }
 
 
             }
-            if(count == getGame(gameId).Rounds[getRounds(gameId)].Group.Count())
+            if(count == game.Rounds[getRounds(game)].Group.Count())
             {
                 verify = true;
             }
 
             return verify;
         }
-        public static bool verifyPsychoWin(string gameId)//Verifica si los psycho ganaron la ronda
+        public static bool verifyPsychoWin(Game game)//Verifica si los psycho ganaron la ronda
         {
             bool verify = false;
             int countPsycho = 0;
-            for (int i = 0; i < getGame(gameId).Rounds[getRounds(gameId)].Group.Count(); i++)
+            for (int i = 0; i < game.Rounds[getRounds(game)].Group.Count(); i++)
             {
-                if (getGame(gameId).Rounds[getRounds(gameId)].Group[i].Psycho == true)
+                if (game.Rounds[getRounds(game)].Group[i].Psycho == true)
                 {
                     countPsycho++;
                 }
@@ -286,23 +285,22 @@ namespace ExamenIIRedesAPI.Util
             return verify;
         }
 
-        public static string getRandomLeader(string gameId)
+        public static string getRandomLeader(Game game)
         {
             Random rd = new Random();
-            Game game = getGame(gameId);
             int rand_num = rd.Next(0, (game.Players.Count()-1));
             return game.Players[rand_num];
 
         }
 
-        public static bool verifyGameWinner(string gameId)//Verifica si hay un bando ya es ganador
+        public static bool verifyGameWinner(Game game)//Verifica si hay un bando ya es ganador
         {
             bool verify = false;
             int countPsycho = 0;
             int countExem = 0;
-            for (int i = 0; i < getGame(gameId).PsychoWin.Count(); i++)
+            for (int i = 0; i < game.PsychoWin.Count(); i++)
             {
-                if (getGame(gameId).PsychoWin[i] == true)
+                if (game.PsychoWin[i] == true)
                 {
                     countPsycho++;
                 }
@@ -322,13 +320,13 @@ namespace ExamenIIRedesAPI.Util
             return verify;
         }
 
-        public static bool verifyGroupList(string gameId, string name)//Verifica si el jugador pertenece al grupo enviado
+        public static bool verifyGroupList(Game game, string name)//Verifica si el jugador pertenece al grupo enviado
         {
             bool verify = false;
             
-            for (int i = 0; i < getGame(gameId).Rounds[getRounds(gameId)].Group.Count(); i++)
+            for (int i = 0; i < game.Rounds[getRounds(game)].Group.Count(); i++)
             {
-                if (getGame(gameId).Rounds[getRounds(gameId)].Group[i].Name.Equals(name))
+                if (game.Rounds[getRounds(game)].Group[i].Name.Equals(name))
                 {
                     verify = true;
                 }
@@ -338,13 +336,13 @@ namespace ExamenIIRedesAPI.Util
             }
             return verify;
         }
-        public static bool psychosWin(string gameId)//Verifica si el jugador pertenece al grupo enviado
+        public static bool psychosWin(Game game)//Verifica si el jugador pertenece al grupo enviado
         {
             bool verify = false;
             int countPsycho = 0;
-            for (int i = 0; i < getGame(gameId).Rounds[getRounds(gameId)].Group.Count(); i++)
+            for (int i = 0; i < game.Rounds[getRounds(game)].Group.Count(); i++)
             {
-                if (getGame(gameId).PsychoWin[i].Equals(true))
+                if (game.PsychoWin[i].Equals(true))
                 {
                     countPsycho++;
                 }
@@ -361,9 +359,8 @@ namespace ExamenIIRedesAPI.Util
             return verify;
         }
         
-        public static int getPsychosCount(string gameId)
+        public static int getPsychosCount(Game game)
         {
-            Game game = getGame(gameId);
             if (game.Players.Count() == 5 || game.Players.Count() == 6)
             {
                 return 2;
@@ -377,9 +374,8 @@ namespace ExamenIIRedesAPI.Util
             }
         }
 
-        public static bool verifyPlayersCount(string gameId)
+        public static bool verifyPlayersCount(Game game)
         {
-            Game game = getGame(gameId);
             bool verify = true;
             if (game.Players.Count() < 5)
             {

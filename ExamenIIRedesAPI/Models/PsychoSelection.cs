@@ -1,4 +1,6 @@
-﻿namespace ExamenIIRedesAPI.Models
+﻿using System.ComponentModel;
+
+namespace ExamenIIRedesAPI.Models
 {
     public class PsychoSelection
     {
@@ -8,7 +10,7 @@
         {
             this.Psycho = psycho;
         }
-
+        [DefaultValue(false)]
         public bool Psycho { get => psycho; set => psycho = value; }
     }
 }

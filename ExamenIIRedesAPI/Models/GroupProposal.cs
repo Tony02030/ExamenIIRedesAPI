@@ -1,4 +1,6 @@
-﻿namespace ExamenIIRedesAPI.Models
+﻿using System.ComponentModel;
+
+namespace ExamenIIRedesAPI.Models
 {
     public class GroupProposal
     {
@@ -8,7 +10,6 @@
         {
             this.Players = players;
         }
-
         public List<string> Players { get => players; set => players = value; }
     }
 }

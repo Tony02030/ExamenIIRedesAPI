@@ -1,5 +1,7 @@
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using ExamenIIRedesAPI.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddSwaggerGen(options =>
     });
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    options.EnableAnnotations();
+    options.SchemaFilter<SwaggerSchemaExampleFilter>();
 });
 
 var app = builder.Build();
