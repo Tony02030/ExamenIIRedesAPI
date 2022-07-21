@@ -95,12 +95,12 @@ namespace ExamenIIRedesAPI.Controllers
         ///Create a new game
         ///</summary>
         ///<remarks>Create a new game. A header 'name' should be used to indicate the game owner and identity to use forward</remarks>
-        ///<param name="owner" >Owner's identity</param>
+        /// <param name="name">Owner's identity</param>
         ///<param name="game">New Game info</param>
         ////// <response code="200">returns all games</response>
         [HttpPost]
         [Route("[action]")]
-        public IActionResult create([Required] string owner, [FromBody][Required] GameBase game)
+        public IActionResult create([Required][FromHeader] string name, [FromBody][Required] GameBase game)
         {
             if (!ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace ExamenIIRedesAPI.Controllers
 
             }
 
-            if (owner == null || owner == "" || game.Name == null || game.Password == null || game.Name == "")
+            if (name == null || name == "" || game.Name == null || game.Password == null || game.Name == "")
 
             {
 
@@ -120,7 +120,7 @@ namespace ExamenIIRedesAPI.Controllers
 
             {
 
-                Game game1 = new Game(game.Name, owner, game.Password);
+                Game game1 = new Game(game.Name, name, game.Password);
 
                 Util.Utility.gameList.Add(game1);
 

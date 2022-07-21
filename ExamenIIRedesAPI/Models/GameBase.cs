@@ -10,13 +10,13 @@
 
 
 
-        public GameBase(string password, string name)
+        public GameBase(string name,string password)
         {
-            this.password = password;
             this.name = name;
+            this.password = password;
         }
-
-        public string Password { get => password; set => password = value; }
         public string Name { get => name; set => name = value; }
+        public string Password { get => password; set => password = value; }
+        
     }
 }

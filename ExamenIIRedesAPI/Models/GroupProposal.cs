@@ -4,12 +4,12 @@ namespace ExamenIIRedesAPI.Models
 {
     public class GroupProposal
     {
-        private List<string> players;
+        private List<string> group;
 
-        public GroupProposal(List<string> players)
+        public GroupProposal(List<string> group)
         {
-            this.Players = players;
+            this.group = group;
         }
-        public List<string> Players { get => players; set => players = value; }
+        public List<string> Group { get => group; set => group = value; }
     }
 }

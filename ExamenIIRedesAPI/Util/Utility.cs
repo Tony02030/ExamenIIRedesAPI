@@ -167,9 +167,9 @@ namespace ExamenIIRedesAPI.Util
         public static bool verifyPlayersExist(Game game, GroupProposal group)
         {
             bool gameExist = true;
-                for (int j = 0; j < group.Players.Count(); j++)
+                for (int j = 0; j < group.Group.Count(); j++)
                 {
-                    if (!game.Players.Contains(group.Players[j]))
+                    if (!game.Players.Contains(group.Group[j]))
                     {
                         gameExist = false;
                     }

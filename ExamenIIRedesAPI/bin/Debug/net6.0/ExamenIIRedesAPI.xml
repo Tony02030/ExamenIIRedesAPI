@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ExamenIIRedesAPI</name>
+    </assembly>
+    <members>
+        <member name="M:ExamenIIRedesAPI.Controllers.RoundsController.Get(System.String,System.String,System.String)">
+            <summary>
+            Extract an arbitrary game
+            </summary>
+            <remarks>Extract information for an arbitrary game. Please notice this is the same as using gameId filters on /</remarks>
+            <param name="gameId" >Game Identificator</param>
+            <param name="name">Player's name</param>
+            <param name="password">Game's password</param>
+            <response code="200">returns game object</response>
+            <response code="403">You are not part of the players list</response>
+            <response code="404">Invalid Game's id</response>
+        </member>
+        <member name="M:ExamenIIRedesAPI.Controllers.RoundsController.join(System.String,System.String,System.String)">
+            <summary>
+            Add player to game
+            </summary>
+            <remarks>Add player to an arbitrary game</remarks>
+            <param name="gameId" >Game Identificator</param>
+            <param name="name">Player's name</param>
+            <param name="password">Game's password</param>
+            <response code="200">returns game object</response>
+            <response code="403">You are not part of the players list</response>
+            <response code="404">Invalid Game's id</response>
+        </member>
+        <member name="M:ExamenIIRedesAPI.Controllers.RoundsController.start(System.String,System.String,System.String)">
+            <summary>
+            Starts the game
+            </summary>
+            <remarks>If you are the game owners, it will start the game</remarks>
+            <param name="gameId" >Game Identificator</param>
+            <param name="name">Player's name</param>
+            <param name="password">Game's password</param>
+            <response code="200">returns game object</response>
+            <response code="401">You are not the game's owner or Unathorized</response>
+            <response code="403">You are not part of the players list</response>
+            <response code="404">Invalid Game's id</response>
+        </member>
+        <member name="M:ExamenIIRedesAPI.Controllers.RoundsController.group(System.String,System.String,System.String,ExamenIIRedesAPI.Models.GroupProposal)">
+            <summary>
+            Group proposal
+            </summary>
+            <remarks>The round leader can propose a group for the current round</remarks>
+            <param name="gameId" >Game Identificator</param>
+            <param name="name">Player's name</param>
+            <param name="password">Game's password</param>
+            <param name="playersGroup">Player's name's array</param>
+            <response code="200">Group was added to the ongoing round</response>
+            <response code="401">Unathorized</response>
+            <response code="403">You are not part of the players list</response>
+            <response code="404">Invalid Game's id</response>
+            <response code="406">Game is not in the groups stage or provided group has invalid parameters (size/players)</response>
+            <response code="409">There is already a group added for this round</response>
+        </member>
+        <member name="M:ExamenIIRedesAPI.Controllers.RoundsController.go(System.String,System.String,System.String,ExamenIIRedesAPI.Models.PsychoSelection)">
+            <summary>
+            Go into round
+            </summary>
+            <param name="gameId" >Game Identificator</param>
+            <param name="name">Player's name</param>
+            <param name="password">Game's password</param>
+            <param name="psycho">Activate psycho mode</param>
+            <response code="200">Group was added to the ongoing round</response>
+            <response code="401">You are not part of the round group list</response>
+            <response code="403">You are not part of the players list</response>
+            <response code="404">Invalid Game's id</response>
+            <response code="406">Data provided is invalid</response>
+            <response code="409">There is already an entry for you this round</response>
+        </member>
+        <member name="M:ExamenIIRedesAPI.Controllers.SetUpController.Get(System.String,System.String)">
+            <summary>
+            list all games
+            </summary>
+            <remarks>List all games. Query strings can be used to indicate filters to be applied on the server side.</remarks>
+             <param name="filter">game property to be used as filter</param>
+             <param name="filterValue">property value to match with. When empty should return an empty array</param>
+             <response code="200">returns all games</response>
+        </member>
+        <member name="M:ExamenIIRedesAPI.Controllers.SetUpController.create(System.String,ExamenIIRedesAPI.Models.GameBase)">
+            <summary>
+            Create a new game
+            </summary>
+            <remarks>Create a new game. A header 'name' should be used to indicate the game owner and identity to use forward</remarks>
+             <param name="name">Owner's identity</param>
+            <param name="game">New Game info</param>
+        </member>
+    </members>
+</doc>

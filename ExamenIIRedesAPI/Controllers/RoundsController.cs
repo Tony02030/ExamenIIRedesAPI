@@ -246,7 +246,7 @@ namespace ExamenIIRedesAPI.Controllers
                 if (Util.Utility.existGameId(gameId))
                 {
                     game = Util.Utility.getGame(gameId);
-                    if (Util.Utility.verifyPlayersCount(game, playersGroup.Players.Count()) && Util.Utility.verifyPlayersExist(game, playersGroup))
+                    if (Util.Utility.verifyPlayersCount(game, playersGroup.Group.Count()) && Util.Utility.verifyPlayersExist(game, playersGroup))
                     {
                         if (game.Players.Contains(name))
                         {
@@ -256,9 +256,9 @@ namespace ExamenIIRedesAPI.Controllers
                                 {
                                     game.Status = "rounds";
 
-                                    for (int i = 0; i < playersGroup.Players.Count(); i++)
+                                    for (int i = 0; i < playersGroup.Group.Count(); i++)
                                     {
-                                        Group group = new Group(playersGroup.Players[i]);
+                                        Group group = new Group(playersGroup.Group[i]);
                                         game.Rounds[Util.Utility.getRounds(game)].Group.Add(group);
 
 
@@ -336,7 +336,7 @@ namespace ExamenIIRedesAPI.Controllers
                     game = Util.Utility.getGame(gameId);
                     if (Util.Utility.verifyPlayerSelection(game, name))
                     {
-                        if (game.Players.Equals(name))
+                        if (game.Players.Contains(name))
                         {
                             if (Util.Utility.verifyGroupList(game, name))
                             {
