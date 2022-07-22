@@ -15,9 +15,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("GetAllPolicy",
       builder =>
       {
-          builder.WithOrigins("http://localhost:7176", "http://localhost:7176/game/","https://localhost:7176", "https://localhost:7176/game/")
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();//PUT, PATCH, GET, DELETE
+          builder.AllowAnyOrigin()
+                 .AllowAnyHeader()
+                 .AllowAnyMethod();//PUT, PATCH, GET, DELETE
       });
 });
 builder.Services.AddSwaggerGen(options =>
@@ -36,21 +36,24 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+app.UseSwagger(c =>
+{
+    c.RouteTemplate = "api-docs/swagger/{documentname}/swagger.json";
 
+});
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/api-docs/swagger/v1/swagger.json", "VacunaDOS");
+    c.RoutePrefix = "api-docs";
+
+
+});
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(c =>
-    {
-        c.RouteTemplate = "api-docs/swagger/{documentname}/swagger.json";
-        
-    });
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/api-docs/swagger/v1/swagger.json", "VacunaDOS");
-        c.RoutePrefix = "api-docs";
-        
-    });
+    app.UseSwagger();
+    app.UseSwaggerUI();    
+    app.UseDeveloperExceptionPage();
 }
 
 

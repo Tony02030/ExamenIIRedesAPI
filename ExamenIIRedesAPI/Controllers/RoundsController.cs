@@ -178,7 +178,7 @@ namespace ExamenIIRedesAPI.Controllers
 
                                 Round round = new Round(Util.Utility.getRandomLeader(game));
                                 game.Rounds.Add(round);
-                                return Ok("Operation successful");
+                                return StatusCode(200, game);
                             }
                             else
                             {
@@ -346,6 +346,11 @@ namespace ExamenIIRedesAPI.Controllers
                                 {
                                     if (game.Status == "rounds")
                                     {
+                                        if (!game.Psychos.Contains(name) && psycho.Psycho == true)
+                                        {
+                                            return StatusCode(401, new ErrorMsg("Unathorized"));
+                                        }
+                                        else { 
                                         Util.Utility.GetGroup(game, name).Psycho = psycho.Psycho;
 
                                         if (Util.Utility.verifyAllGroupSelection(game))
@@ -357,12 +362,14 @@ namespace ExamenIIRedesAPI.Controllers
                                                 if (Util.Utility.verifyGameWinner(game))
                                                 {
                                                     game.Status = "ended";
+                                                    game.Rounds[Util.Utility.getRounds(game)].Winner = "psychos";
                                                 }
                                                 else
                                                 {
                                                     game.Rounds[Util.Utility.getRounds(game)].Winner = "psychos";
                                                     game.Status = "leader";
                                                     Round round = new Round(Util.Utility.getRandomLeader(game));
+                                                    round.Id = Util.Utility.getRounds(game) + 1;
                                                     game.Rounds.Add(round);
                                                 }
 
@@ -375,12 +382,14 @@ namespace ExamenIIRedesAPI.Controllers
                                                 if (Util.Utility.verifyGameWinner(game))
                                                 {
                                                     game.Status = "ended";
+                                                    game.Rounds[Util.Utility.getRounds(game)].Winner = "players";
                                                 }
                                                 else
                                                 {
                                                     game.Rounds[Util.Utility.getRounds(game)].Winner = "players";
                                                     game.Status = "leader";
                                                     Round round = new Round(Util.Utility.getRandomLeader(game));
+                                                    round.Id = Util.Utility.getRounds(game) + 1;
                                                     game.Rounds.Add(round);
                                                 }
 
@@ -389,7 +398,8 @@ namespace ExamenIIRedesAPI.Controllers
 
                                         }
 
-                                        return Ok("Operation successful");
+                                        return StatusCode(200,new GameMessage("Operation successful"));
+                                    }
                                     }
                                     else
                                     {
